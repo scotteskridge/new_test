@@ -27,7 +27,10 @@ Navigate to the folder with the PEM folder
 3) chmod 400 django_pem.pem  <<< file name may be differed (probably will be)
 connect via ssh to you aws server
 4) ubuntu@54.162.31.253:~$ sudo apt-get update
-5) ubuntu@54.162.31.253:~$ sudo apt-get install python-pip python-dev nginx git
+5) ubuntu@54.162.31.253:~$ sudo apt-get install python-pip
+                           sudo apt-get install python-dev
+                            sudo apt-get install nginx
+                                                sudo apt-get install git
 6) ubuntu@54.162.31.253:~$ sudo apt-get update
 7) ubuntu@54.162.31.253:~$ sudo pip install virtualenv
 Clone your project from github using git clone
@@ -36,7 +39,7 @@ Clone your project from github using git clone
 10) (venv)ubuntu@54.162.31.253:~/myRepoName$ pip install -r requirements.txt
 11) (venv) ubuntu@54.162.31.253:~/myRepoName$ pip install django bcrypt django-extensions
 12) (venv) ubuntu@54.162.31.253:~/myRepoName$ pip install gunicorn
-13) (venv) ubuntu@54.162.31.253:~/myRepoName$ cd {{projectName}}
+13) (venv) ubuntu@54.162.31.253:~/myRepoName$ cd new_test
 14) (venv) ubuntu@54.162.31.253:~/myRepoName/projectName$ sudo vim settings.py
 make the following edits in settings.py
 -------------------------------------------------
@@ -50,7 +53,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 15) cd ..
 16) (venv) ubuntu@54.162.31.253:~myRepoName$ python manage.py collectstatic
 say yes
-17) (venv) ubuntu@54.162.31.253:~myRepoName$ gunicorn --bind 0.0.0.0:8000 {{projectName}}.wsgi:application
+17) (venv) ubuntu@54.162.31.253:~myRepoName$ gunicorn --bind 0.0.0.0:8000 new_test.wsgi:application
 ctrl+c to exit process
 18) deactivate
 19) ubuntu@54.162.31.253:~myRepoName$ sudo vim /etc/systemd/system/gunicorn.service
@@ -63,7 +66,7 @@ After=network.target
 User=ubuntu
 Group=www-data
 WorkingDirectory=/home/ubuntu/new_test
-ExecStart=/home/ubuntu/new_test/venv/bin/gunicorn --workers 3 --bind unix:/home/ubuntu/new_test/{{projectName}}.sock {{projectName}}.wsgi:application
+ExecStart=/home/ubuntu/new_test/venv/bin/gunicorn --workers 3 --bind unix:/home/ubuntu/new_test/new_test.sock new_test.wsgi:application
 [Install]
 WantedBy=multi-user.target
 ---------------------------------------------------
@@ -71,7 +74,7 @@ WantedBy=multi-user.target
 21) ubuntu@54.162.31.253:~$ sudo systemctl daemon-reload
 22) ubuntu@54.162.31.253:~$ sudo systemctl start gunicorn
 23) ubuntu@54.162.31.253:~$ sudo systemctl enable gunicorn
-24) ubuntu@54.162.31.253:~$ sudo vim /etc/nginx/sites-available/{{projectName}}
+24) ubuntu@54.162.31.253:~$ sudo vim /etc/nginx/sites-available/new_test
 Copy and edit the following into the document
 ------------------------------------------------------
 server {
@@ -83,7 +86,7 @@ server {
   }
   location / {
       include proxy_params;
-      proxy_pass http://unix:/home/ubuntu/new_test/{{projectName}}.sock;
+      proxy_pass http://unix:/home/ubuntu/new_test/new_test.sock;
   }
 }
 -----------------------------------------------------------
