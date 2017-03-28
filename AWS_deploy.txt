@@ -82,7 +82,7 @@ server {
   server_name {{yourEC2.public.ip}};
   location = /favicon.ico { access_log off; log_not_found off; }
   location /static/ {
-      root /home/ubuntu/new_test;
+      root /home/ubuntu/new_test;s
   }
   location / {
       include proxy_params;
@@ -90,7 +90,7 @@ server {
   }
 }
 -----------------------------------------------------------
-25) ubuntu@54.162.31.253:~$ sudo ln -s /etc/nginx/sites-available/new_test/etc/nginx/sites-enabled
+25) ubuntu@54.162.31.253:~$ sudo ln -s /etc/nginx/sites-available/new_test /etc/nginx/sites-enabled
 26) ubuntu@54.162.31.253:~$ sudo nginx -t
 27) ubuntu@54.162.31.253:~$ sudo rm /etc/nginx/sites-enabled/default
 28) ubuntu@54.162.31.253:~$ sudo service nginx restart
