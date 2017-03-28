@@ -8,5 +8,52 @@
     <h1>Can I commit to aws?</h1>
     <h2>route to login and testing commiting</h2>
     <a href="{% url 'login:index' %}">Login</a>
+    <a href="{% url 'login:logout' %}">logout</a>
+    <a href="{% url 'main:next_page' %}">Next Page</a>
+
+  <h2>Current User</h2>
+    <table>
+    <tr>
+      <th>name</th>
+      <th>user_name</th>
+      <th>email</th>
+      <th>date_hired</th>
+      <th>name</th>
+
+    </tr>
+
+
+    <tr>
+      <th>{{current_user.name}}</th>
+      <th>{{current_user.user_name}}</th>
+      <th>{{current_user.email}}</th>
+      <th>{{current_user.date_hired}}</th>
+      <th>{{current_user.name}}</th>
+
+    </tr>
+
+  </table>
+
+  <h2>All Users</h2>
+    <table>
+    <tr>
+      <th>name</th>
+      <th>user_name</th>
+      <th>email</th>
+      <th>date_hired</th>
+      <th>name</th>
+
+    </tr>
+    {% for user in all_users%}
+    <tr>
+      <th>{{user.name}}</th>
+      <th>{{user.user_name}}</th>
+      <th>{{user.email}}</th>
+      <th>{{user.date_hired}}</th>
+      <th>{{user.name}}</th>
+
+    </tr>
+    {% endfor %}
+  </table>
   </body>
 </html>
