@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <a href="{% url 'login:logout' %}">logout</a>
+    <a href="{% url 'main:index' %}">Dashboard</a>
+
+    <form class="" action="{% url 'main:confirm_edit_appointment' appointment.id %}" method="post">
+      {% csrf_token %}
+      <ul>
+        <li><label for="Task">Task:</label> <input type="text" name="task" value="{{appointment.task}}"></li>
+        <li><label for="status">status:</label>
+        <select name = "status">
+          <option value="Pending">Pending</option>
+          <option value="Done">Done</option>
+          <option value="Missed">Missed</option>
+        </select></li>
+        <li><label for="date">Date:</label><input type="text" name="date" value= '{{appointment.start_date}}'></li>
+        <li><label for="time">Time:</label> <input type="text" name="time" value= '{{appointment.start_time}}'></li>
+        <input type="submit" name="Update" value="Update">
+      </ul>
+    </form>
+
+    {% if messages %}
+      {% for error in messages %}
+      <p >{{error}}</p>
+      {% endfor %}
+    {% endif %}
+  </body>
+</html>

@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
+import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
@@ -10,19 +11,21 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        ('login', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='User',
+            name='Appointment',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=45)),
-                ('email', models.CharField(max_length=255)),
-                ('password', models.CharField(max_length=255)),
-                ('birth_date', models.DateField(blank=True)),
+                ('task', models.CharField(max_length=255)),
+                ('status', models.CharField(max_length=255)),
+                ('start_date', models.DateField(blank=True)),
+                ('start_time', models.TimeField(blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
+                ('created_by', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_created_by', to='login.User')),
             ],
         ),
     ]

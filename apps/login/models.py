@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 from django.db import models
+from datetime import date, datetime
+from dateutil.parser import parse as parse_date
 import re, bcrypt
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 
@@ -12,16 +14,15 @@ class UserManager(models.Manager):
         if len(postData["name"]) < 2:
             errors.append("First Name must be more than 2 character long")
         #check if user_name >2
-        if len(postData["user_name"]) < 2:
-            errors.append("First Name must be more than 2 character long")
-        if not len(postData["date_hired"]):
-            errors.append("Date can't be empty")
+        if not len(postData["birth_date"]):
+            errors.append("Birth Date can't be empty")
+        elif not parse_date(postData["birth_date"]) < datetime.today():
+            errors.append("Birth Date must be in the past")
         #check if email matches regex and is not empty
         if not len(postData["email"].lower()):
             errors.append("Email is required")
-        else:
-            if not EMAIL_REGEX.match(postData["email"].lower()):
-                errors.append("Enter a valid Email address")
+        elif not EMAIL_REGEX.match(postData["email"].lower()):
+            errors.append("Enter a valid Email address")
         #check if email is unique
         if self.filter(email = postData["email"].lower()):
             errors.append("Email already in use")
@@ -39,7 +40,7 @@ class UserManager(models.Manager):
             #hash post data password
             hashed_password = bcrypt.hashpw(postData["password"].encode(), bcrypt.gensalt())
             #create the user self.create?
-            user = self.create(name = postData["name"], user_name = postData["user_name"], email = postData["email"].lower(), date_hired= postData["date_hired"], password = hashed_password)
+            user = self.create(name = postData["name"], email = postData["email"].lower(), birth_date= postData["birth_date"], password = hashed_password)
             #create a reply to the veiws with the user and a status true back to veiws
             reply_to_veiws["user"] = user
             reply_to_veiws["status"] = True
@@ -72,15 +73,11 @@ class UserManager(models.Manager):
         #so first off find the password
         else:
             if not bcrypt.checkpw(postData["password"].encode(), user[0].password.encode()):
-
                 errors.append("Password doesn't match login email")
-
         if not errors:
-
             reply_to_veiws["user"] = user.first()
             reply_to_veiws["status"] = True
         else:
-
             reply_to_veiws["errors"] = errors
             reply_to_veiws["status"] = False
         #Dump all the errors into errors{} so you can pass it back
@@ -90,10 +87,9 @@ class UserManager(models.Manager):
 # Create your models here.
 class User(models.Model):
     name = models.CharField(max_length = 45)
-    user_name = models.CharField(max_length = 45)
     email = models.CharField(max_length = 255)
     password = models.CharField(max_length = 255)
-    date_hired = models.DateField(blank=True)
+    birth_date = models.DateField(blank=True)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
     objects = UserManager()
