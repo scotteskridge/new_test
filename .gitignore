@@ -16,7 +16,8 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-
+*.pyc
+venv/
 
 # =========================
 # Operating System Files
