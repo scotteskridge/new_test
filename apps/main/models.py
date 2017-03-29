@@ -10,7 +10,7 @@ class AppointmentManager(models.Manager):
         #make an appointment with validations
         reply_to_veiws = {}
         errors = []
-
+        #we are making a change to commit
         #do some validations
         if not len(postData["task"]):
             errors.append("Please enter a task")
