@@ -18,6 +18,7 @@ $RECYCLE.BIN/
 *.lnk
 *.pyc
 venv/
+db.sqlite3
 
 # =========================
 # Operating System Files
