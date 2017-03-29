@@ -79,10 +79,10 @@ Copy and edit the following into the document
 ------------------------------------------------------
 server {
   listen 80;
-  server_name {{yourEC2.public.ip}};
+  server_name 54.70.66.165;
   location = /favicon.ico { access_log off; log_not_found off; }
   location /static/ {
-      root /home/ubuntu/new_test;s
+      root /home/ubuntu/new_test;
   }
   location / {
       include proxy_params;
