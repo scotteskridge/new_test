@@ -18,19 +18,21 @@ class AppointmentManager(models.Manager):
             errors.append("Due Date can't be empty")
         if not len(postData["time"]):
             errors.append("Time can't be empty")
-        print("8"*80)
-        print ("Am I checking lengths?")
-        print (errors)
+
         #if no fields are blank then do more validations
         if not errors:
             #check if the entered data and time match any other dates and times for this user
+
             user = User.objects.get(id = user_id)
             current_appointments = Appointment.objects.filter(created_by = user)
             for appointment in current_appointments:
-                if parse_date(postData["date"]) == appointment.start_date and parse_date(postData["time"]) == appointment.start_time:
+
+                if parse_date(postData["date"]).date() == appointment.start_date and parse_date(postData["time"]).time() == appointment.start_time:
                     errors.append("Time slot already filled")
-            print("8"*80)
-            print ("Am I past checking lengths?")
+
+            print(parse_date(postData["date"]).date())
+            print(datetime.today().date())
+            print(parse_date(postData["date"]).date() == datetime.today().date())
             #if date equals today check time for future
             if parse_date(postData["date"]).date() == datetime.today().date():
                 if parse_date(postData["time"]) < datetime.today():
@@ -39,15 +41,17 @@ class AppointmentManager(models.Manager):
             #else if the date is not today that it's in the future
             elif parse_date(postData["date"]).date() < datetime.today().date():
                 errors.append("Appointment date must be in the future")
+
+
         #might need a few more validations for time but lets run with this for now
         if not errors:
             user = User.objects.get(id = user_id)
             print("8"*80)
             print ("do i get a user?")
             print (user.name)
-            date_from_form = parse_date(postData["date"])
+            date_from_form = parse_date(postData["date"]).date()
             print (date_from_form)
-            time_from_form = parse_date(postData["time"])
+            time_from_form = parse_date(postData["time"]).time()
             print (time_from_form)
             appointment = self.create(task = postData["task"], created_by = user, start_date =  parse_date(postData["date"]), start_time =  parse_date(postData["time"]), status = "Pending")
             reply_to_veiws["appointment"] = appointment
@@ -58,7 +62,7 @@ class AppointmentManager(models.Manager):
             reply_to_veiws["status"] = False
         return reply_to_veiws
 
-    def edit_appointment(self, postData, appointment_id):
+    def edit_appointment(self, postData, appointment_id, user_id):
         #make an appointment with validations
         reply_to_veiws = {}
         errors = []
@@ -73,6 +77,13 @@ class AppointmentManager(models.Manager):
         print (errors)
         #if no fields are blank then do mroe validations
         if not errors:
+            #check if time slot is filled
+            user = User.objects.get(id = user_id)
+            current_appointments = Appointment.objects.filter(created_by = user)
+            for appointment in current_appointments:
+
+                if parse_date(postData["date"]).date() == appointment.start_date and parse_date(postData["time"]).time() == appointment.start_time:
+                    errors.append("Time slot already filled")
             print("8"*80)
             print ("Am I past checking lengths?")
             #if date equals today check time for future
@@ -85,10 +96,7 @@ class AppointmentManager(models.Manager):
                 errors.append("Appointment date must be in the future")
         #might need a few more validations for time but lets run with this for now
         if not errors:
-            date_from_form = parse_date(postData["date"])
-            print (date_from_form)
-            time_from_form = parse_date(postData["time"])
-            print (time_from_form)
+
             appointment = Appointment.objects.get(id = appointment_id)
 
             appointment.task = postData["task"]
@@ -107,8 +115,7 @@ class AppointmentManager(models.Manager):
 
     def update_status(self):
         #every time you log into your main page update all of the statuses the possible options are defualt = Pending, user updated = Done, in the past and not done = Missed
-        print("8"*80)
-        print ("Am I updating statuses?")
+
         all_appointments = Appointment.objects.all()
         for appointment in all_appointments:
 

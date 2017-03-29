@@ -18,8 +18,8 @@
           <option value="Done">Done</option>
           <option value="Missed">Missed</option>
         </select></li>
-        <li><label for="date">Date:</label><input type="text" name="date" value= '{{appointment.start_date}}'></li>
-        <li><label for="time">Time:</label> <input type="text" name="time" value= '{{appointment.start_time}}'></li>
+        <li><label for="date">Date:</label><input type="date" name="date" value= '{{appointment.start_date |date:"Y-m-d"}}'></li>
+        <li><label for="time">Time:</label> <input type="time" name="time" value= '{{appointment.start_time |date:"H:i"}}'></li>
         <input type="submit" name="Update" value="Update">
       </ul>
     </form>

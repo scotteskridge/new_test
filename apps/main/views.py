@@ -61,7 +61,7 @@ def confirm_edit_appointment(request, appointment_id):
     if not request.method == "POST":
         return redirect ("main:index")
     appointment = Appointment.objects.get(id = appointment_id)
-    responce_from_model = Appointment.objects.edit_appointment(request.POST, appointment_id)
+    responce_from_model = Appointment.objects.edit_appointment(request.POST, appointment_id, request.session["user_id"])
     context = {
         "appointment" : appointment
     }
