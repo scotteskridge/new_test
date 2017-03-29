@@ -18,7 +18,7 @@ Initialize, Commit and push to github:
 > git init
 > git add --all
 > git commit -m "initial commit"
-> git remote add origin https://github.com/AnnaBNana/courses.git <<< will be different
+> git remote add origin https://github.com/scotteskridge/new_test.git<<< will be different
 > git push origin master
 Launch a new AWS EC2 Instance.
 Configure security Group; Add types HTTP, HTTPS set source to Anywhere. Change SSH source to My IP
@@ -79,7 +79,7 @@ Copy and edit the following into the document
 ------------------------------------------------------
 server {
   listen 80;
-  server_name 54.70.66.165;
+  server_name 54.148.253.79;
   location = /favicon.ico { access_log off; log_not_found off; }
   location /static/ {
       root /home/ubuntu/new_test;
