@@ -11,8 +11,8 @@
     <h2>Login:</h2>
     <form class="" action="{% url 'login:login' %}" method="post">
       {% csrf_token %}
-      <input type="text" name="email" value="name@username.com">
-      <input type="password" name="password" value="password">
+      <input type="text" name="user_name" placeholder="user_name">
+      <input type="password" name="password" placeholder="password">
       <input type="submit" name="submit" placeholder="submit">
     </form>
   </div>
@@ -23,11 +23,9 @@
       {% csrf_token %}
       <ul>
         <li><label for="Name">Name:</label> <input type="text" name="name" placeholder="name"></li>
-          <li><label for="last_name">last_name:</label> <input type="text" name="last_name" placeholder="last_name"></li>
-        <li><label for="email">Email Address:</label><input type="email" name="email" placeholder="name@username.com"></li>
+        <li><label for="user_name">user_name:</label> <input type="text" name="user_name" placeholder="user_name"></li>
         <li><label for="password">Password:</label><input type="password" name="password" placeholder="password"></li>
         <li><label for="password_confirm">Confirm Password:</label> <input type="password" name="password_confirm" placeholder="password"></li>
-        <li><label for="birth_date">Birth Date:</label>  <input type="date" name="birth_date" placeholder=""></li>
         <input type="submit" name="submit" placeholder="submit">
       </ul>
     </form>
