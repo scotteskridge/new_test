@@ -6,63 +6,9 @@
   </head>
   <body>
     <a href="{% url 'login:logout' %}">logout</a>
-  <h1>Hello {{current_user.name}}</h1>
-  <p>Here are your appointments for today, {{now}}</p>
-  <table>
-    <tr>
-      <th>Tasks</th>
-      <th>Time</th>
-      <th>Status</th>
-      <th>Action</th>
-    </tr>
-    {% for appointment in todays_appointments %}
-    <tr>
-      <td>{{appointment.task}}</td>
-      <td>{{appointment.start_time}}</td>
-      <td>{{appointment.status}}</td>
-      <td>{% if appointment.status == "Pending" %}<form class="" action="{% url 'main:edit_appointment' appointment.id %}" method="post">
-         {% csrf_token %}
-        <input type="submit" name="edit" value="edit">
-      </form> <form class="" action="{% url 'main:delete_appointment' appointment.id %}" method="post">
-         {% csrf_token %}
-        <input type="submit" name="delete" value="delete">
-      </form>{% endif %}</td>
-    </tr>
-    {% endfor %}
-  </table>
+  <h1>Hello {{current_user.name}} today is {{now.date}} and the time is {{now.time}}</h1>
 
-  <p>Here are your other appointments </p>
-  <table>
-    <tr>
-      <th>Tasks</th>
-      <th>Time</th>
-      <th>Action</th>
-    </tr>
-    {% for appointment in other_appointments %}
-    <tr>
-      <td>{{appointment.task}}</td>
-      <td>{{appointment.start_date}}</td>
-      <td>{{appointment.start_time}}</td>
-      <td><form class="" action="{% url 'main:edit_appointment' appointment.id %}" method="post">
-         {% csrf_token %}
-        <input type="submit" name="edit" value="edit">
-      </form> <form class="" action="{% url 'main:delete_appointment' appointment.id %}" method="post">
-         {% csrf_token %}
-        <input type="submit" name="delete" value="delete">
-      </form></td>
-    </tr>
-    {% endfor %}
-  </table>
 
-  <h2>Add Appointment</h2>
-  <form class="" action="{% url 'main:add_appointment' %}" method="post">
-    {% csrf_token %}
-    <input type="date" name="date" value="">
-    <input type="time" name="time" value="">
-    <input type="text" name="task" value="">
-    <input type="submit" name="submit" value="submit">
-
-  </form>
 
   {% if messages %}
     {% for error in messages %}
