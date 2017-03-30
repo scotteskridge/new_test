@@ -13,7 +13,7 @@ class UserManager(models.Manager):
             errors.append("First Name must be at least 3 character long")
         if len(postData["user_name"]) < 2:
             errors.append("user_name must be at least 3 character long")
-        if self.filter(user_name = postData["user_name"].lower()):
+        if self.filter(user_name = postData["user_name"]):
             errors.append("User name already in use")
         #check is password is null
         if len(postData["password"]) < 8:
@@ -44,7 +44,7 @@ class UserManager(models.Manager):
 
         if postData:
 
-            user = self.filter(user_name = postData["user_name"].lower())
+            user = self.filter(user_name = postData["user_name"])
 
 
         if not user:
