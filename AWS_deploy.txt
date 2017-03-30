@@ -3,7 +3,7 @@ Steps for provisioning your server and deployment
 Use the following to find and replace:
 new_test-- Django project name
 new_test -- Github repo name
-{{yourEC2.public.ip}} -- AWS public IP, remember to make edit in step 14
+54.148.246.23 -- AWS public IP, remember to make edit in step 14
 
 In terminal navigate to the root folder of your project with venv activated
 1) pip freeze > requirements.txt
@@ -26,37 +26,37 @@ Save issued PEM file in a save none uploadable folder
 Navigate to the folder with the PEM folder
 3) chmod 400 django_pem.pem  <<< file name may be differed (probably will be)
 connect via ssh to you aws server
-4) ubuntu@54.162.31.253:~$ sudo apt-get update
-5) ubuntu@54.162.31.253:~$ sudo apt-get install python-pip
+4) ubuntu@54.148.246.23:~$ sudo apt-get update
+5) ubuntu@54.148.246.23:~$ sudo apt-get install python-pip
                            sudo apt-get install python-dev
                             sudo apt-get install nginx
                                                 sudo apt-get install git
-6) ubuntu@54.162.31.253:~$ sudo apt-get update
-7) ubuntu@54.162.31.253:~$ sudo pip install virtualenv
+6) ubuntu@54.148.246.23:~$ sudo apt-get update
+7) ubuntu@54.148.246.23:~$ sudo pip install virtualenv
 Clone your project from github using git clone
-8) ubuntu@54.162.31.253:~/myRepoName$ virtualenv venv
-9) ubuntu@54.162.31.253:~/myRepoName$ source venv/bin/activate
-10) (venv)ubuntu@54.162.31.253:~/myRepoName$ pip install -r requirements.txt
-11) (venv) ubuntu@54.162.31.253:~/myRepoName$ pip install django bcrypt django-extensions
-12) (venv) ubuntu@54.162.31.253:~/myRepoName$ pip install gunicorn
-13) (venv) ubuntu@54.162.31.253:~/myRepoName$ cd new_test
-14) (venv) ubuntu@54.162.31.253:~/myRepoName/projectName$ sudo vim settings.py
+8) ubuntu@54.148.246.23:~/myRepoName$ virtualenv venv
+9) ubuntu@54.148.246.23:~/myRepoName$ source venv/bin/activate
+10) (venv)ubuntu@54.148.246.23:~/myRepoName$ pip install -r requirements.txt
+11) (venv) ubuntu@54.148.246.23:~/myRepoName$ pip install django bcrypt django-extensions
+12) (venv) ubuntu@54.148.246.23:~/myRepoName$ pip install gunicorn
+13) (venv) ubuntu@54.148.246.23:~/myRepoName$ cd new_test
+14) (venv) ubuntu@54.148.246.23:~/myRepoName/projectName$ sudo vim settings.py
 make the following edits in settings.py
 -------------------------------------------------
 # Inside settings.py
 # modify these linescd Ni
 DEBUG = False
-ALLOWED_HOSTS = ['{{yourEC2.public.ip}}']
+ALLOWED_HOSTS = ['54.148.246.23']
 # add the line below to the bottom of the file
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 -------------------------------------------------
 15) cd ..
-16) (venv) ubuntu@54.162.31.253:~myRepoName$ python manage.py collectstatic
+16) (venv) ubuntu@54.148.246.23:~myRepoName$ python manage.py collectstatic
 say yes
-17) (venv) ubuntu@54.162.31.253:~myRepoName$ gunicorn --bind 0.0.0.0:8000 new_test.wsgi:application
+17) (venv) ubuntu@54.148.246.23:~myRepoName$ gunicorn --bind 0.0.0.0:8000 new_test.wsgi:application
 ctrl+c to exit process
 18) deactivate
-19) ubuntu@54.162.31.253:~myRepoName$ sudo vim /etc/systemd/system/gunicorn.service
+19) ubuntu@54.148.246.23:~myRepoName$ sudo vim /etc/systemd/system/gunicorn.service
 Copy and edit the following into gunicorn..service
 ---------------------------------------------------
 [Unit]
@@ -71,15 +71,15 @@ ExecStart=/home/ubuntu/new_test/venv/bin/gunicorn --workers 3 --bind unix:/home/
 WantedBy=multi-user.target
 ---------------------------------------------------
 20) cd ..
-21) ubuntu@54.162.31.253:~$ sudo systemctl daemon-reload
-22) ubuntu@54.162.31.253:~$ sudo systemctl start gunicorn
-23) ubuntu@54.162.31.253:~$ sudo systemctl enable gunicorn
-24) ubuntu@54.162.31.253:~$ sudo vim /etc/nginx/sites-available/new_test
+21) ubuntu@54.148.246.23:~$ sudo systemctl daemon-reload
+22) ubuntu@54.148.246.23:~$ sudo systemctl start gunicorn
+23) ubuntu@54.148.246.23:~$ sudo systemctl enable gunicorn
+24) ubuntu@54.148.246.23:~$ sudo vim /etc/nginx/sites-available/new_test
 Copy and edit the following into the document
 ------------------------------------------------------
 server {
   listen 80;
-  server_name 54.148.253.79;
+  server_name 54.148.246.23;
   location = /favicon.ico { access_log off; log_not_found off; }
   location /static/ {
       root /home/ubuntu/new_test;
@@ -90,7 +90,7 @@ server {
   }
 }
 -----------------------------------------------------------
-25) ubuntu@54.162.31.253:~$ sudo ln -s /etc/nginx/sites-available/new_test /etc/nginx/sites-enabled
-26) ubuntu@54.162.31.253:~$ sudo nginx -t
-27) ubuntu@54.162.31.253:~$ sudo rm /etc/nginx/sites-enabled/default
-28) ubuntu@54.162.31.253:~$ sudo service nginx restart
+25) ubuntu@54.148.246.23:~$ sudo ln -s /etc/nginx/sites-available/new_test /etc/nginx/sites-enabled
+26) ubuntu@54.148.246.23:~$ sudo nginx -t
+27) ubuntu@54.148.246.23:~$ sudo rm /etc/nginx/sites-enabled/default
+28) ubuntu@54.148.246.23:~$ sudo service nginx restart
