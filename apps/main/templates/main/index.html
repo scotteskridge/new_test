@@ -5,10 +5,60 @@
     <title></title>
   </head>
   <body>
-    <a href="{% url 'login:logout' %}">logout</a>
-  <h1>Hello {{current_user.name}} today is {{now.date}} and the time is {{now.time}}</h1>
+    <a href="{% url 'login:logout' %}">Logout</a>
+  <h1>Hello {{current_user.name}} </h1>
+  <p>Your Trip Schedules:</p>
 
+  <table>
+    <tr>
+      <th>Destination</th>
+      <th>Travel Start Date</th>
+      <th>Travel End Date</th>
+      <th>Plan</th>
+    </tr>
 
+    {% for trip in my_trips %}
+    <tr>
+      <td><form class="" action="{% url 'main:view_trip' trip.id  %}" method="post">
+        {% csrf_token %}
+        <input type="submit" name="{{ trip.destination }}" value="{{ trip.destination }}">
+      </form> </td>
+      <td>{{ trip.start_date }}</td>
+      <td>{{ trip.end_date }}</td>
+      <td>{{ trip.plan }}</td>
+    </tr>
+    {% endfor %}
+
+  </table>
+  <br>
+<h2>Other User's Travel Plans</h2>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Destination</th>
+      <th>Travel Start Date</th>
+      <th>Travel End Date</th>
+      <th>Do You want to join?</th>
+    </tr>
+
+    {% for trip in others_trips %}
+    <tr>
+      <td>{{ trip.created_by.name }}</td>
+      <td> <form class="" action = "{% url 'main:view_trip' trip.id  %}" method="post">
+        {% csrf_token %}
+        <input type="submit" name="{{ trip.destination }}" value="{{ trip.destination }}">
+      </form></td>
+      <td>{{ trip.start_date }}</td>
+      <td>{{ trip.end_date }}</td>
+      <td><form class="" action="{% url 'main:join_trip' trip.id  %}" method="post">
+        {% csrf_token %}
+        <input type="submit" name="{{ trip.destination }}" value="Join"> </form></td>
+    </tr>
+    {% endfor %}
+
+  </table>
+  <br>
+<a href="{% url 'main:create_trip' %}">Add Travel Plan</a>
 
   {% if messages %}
     {% for error in messages %}
