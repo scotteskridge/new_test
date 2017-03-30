@@ -13,6 +13,8 @@ class UserManager(models.Manager):
         #check if firstname >2
         if len(postData["name"]) < 2:
             errors.append("First Name must be more than 2 character long")
+        if len(postData["last_name"]) < 2:
+            errors.append("last_name must be more than 2 character long")
         #check if user_name >2
         if not len(postData["birth_date"]):
             errors.append("Birth Date can't be empty")
@@ -40,7 +42,7 @@ class UserManager(models.Manager):
             #hash post data password
             hashed_password = bcrypt.hashpw(postData["password"].encode(), bcrypt.gensalt())
             #create the user self.create?
-            user = self.create(name = postData["name"], email = postData["email"].lower(), birth_date= postData["birth_date"], password = hashed_password)
+            user = self.create(name = postData["name"], last_name = postData["last_name"], email = postData["email"].lower(), birth_date= postData["birth_date"], password = hashed_password)
             #create a reply to the veiws with the user and a status true back to veiws
             reply_to_veiws["user"] = user
             reply_to_veiws["status"] = True
@@ -87,6 +89,7 @@ class UserManager(models.Manager):
 # Create your models here.
 class User(models.Model):
     name = models.CharField(max_length = 45)
+    last_name = models.CharField(max_length = 45)
     email = models.CharField(max_length = 255)
     password = models.CharField(max_length = 255)
     birth_date = models.DateField(blank=True)
