@@ -24,7 +24,7 @@ def validate_duplicate_appointments(user_id, postData, errors):
 
 def validate_future_appointments(user_id, postData, errors):
     if parse_date(postData["date"]).date() == datetime.today().date():
-        if parse_date(postData["time"]) < datetime.today():
+        if parse_date(postData["time"]).time() < datetime.today().time():
             errors.append("Appointment time must be in the future")
 
     #else if the date is not today that it's in the future
