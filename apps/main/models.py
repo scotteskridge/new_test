@@ -35,17 +35,14 @@ class TripManager(models.Manager):
 
         if not errors:
             user = User.objects.get(id = user_id)
-            print ("8"*80)
-            print("am I getting a user")
-            print(user.name)
-            print(parse_date(postData["start_date"]).date())
-            print(parse_date(postData["end_date"]).date())
-            trip = self.create(destination = postData["destination"], start_date = parse_date(postData["start_date"]), end_date = parse_date(postData["end_date"]), plan = postData["plan"], created_by = user)
+            trip = self.create(
+                destination = postData["destination"],
+                start_date = parse_date(postData["start_date"]),
+                end_date = parse_date(postData["end_date"]),
+                plan = postData["plan"],
+                created_by = user)
             trip.joined_by.add(user)
 
-            print ("8"*80)
-            print("am I getting a trip")
-            print(trip.destination)
             reply_to_veiws["trip"] = trip
             reply_to_veiws["status"] = True
 
